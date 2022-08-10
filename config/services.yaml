@@ -42,3 +42,8 @@ services:
         class: App\Admin\PurchaseAdmin
         tags:
             - { name: sonata.admin, model_class: App\Entity\Purchase, controller: ~, manager_type: orm, group: admin, label: Purchase }
+
+    admin.bill:
+        class: App\Admin\BillAdmin
+        tags:
+            - { name: sonata.admin, model_class: App\Entity\Bill, controller: ~, manager_type: orm, group: admin, label: Bill }

@@ -21,9 +21,17 @@ class Purchase
     #[ORM\ManyToOne(inversedBy: 'purchases')]
     private ?Customer $customer = null;
 
+    #[ORM\OneToOne(inversedBy: 'purchase', cascade: ['persist', 'remove'])]
+    private ?Bill $bill = null;
+
     public function __construct()
     {
         $this->products = new ArrayCollection();
+    }
+
+    public function __toString()
+    {
+        return $this->id . '-' . $this->customer . '(' . count($this->products) . ' items)';
     }
 
     public function getId(): ?int
@@ -63,6 +71,18 @@ class Purchase
     public function setCustomer(?Customer $customer): self
     {
         $this->customer = $customer;
+
+        return $this;
+    }
+
+    public function getBill(): ?Bill
+    {
+        return $this->bill;
+    }
+
+    public function setBill(?Bill $bill): self
+    {
+        $this->bill = $bill;
 
         return $this;
     }
