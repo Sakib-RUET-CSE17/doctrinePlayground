@@ -37,3 +37,8 @@ services:
         class: App\Admin\CustomerAdmin
         tags:
             - { name: sonata.admin, model_class: App\Entity\Customer, controller: ~, manager_type: orm, group: admin, label: Customer }
+
+    admin.purchase:
+        class: App\Admin\PurchaseAdmin
+        tags:
+            - { name: sonata.admin, model_class: App\Entity\Purchase, controller: ~, manager_type: orm, group: admin, label: Purchase }
