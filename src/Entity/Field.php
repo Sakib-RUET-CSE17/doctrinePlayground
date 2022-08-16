@@ -19,6 +19,9 @@ class Field
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $type = null;
 
+    #[ORM\ManyToOne(inversedBy: 'fields')]
+    private ?Settings $settings = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -44,6 +47,18 @@ class Field
     public function setType(?string $type): self
     {
         $this->type = $type;
+
+        return $this;
+    }
+
+    public function getSettings(): ?Settings
+    {
+        return $this->settings;
+    }
+
+    public function setSettings(?Settings $settings): self
+    {
+        $this->settings = $settings;
 
         return $this;
     }

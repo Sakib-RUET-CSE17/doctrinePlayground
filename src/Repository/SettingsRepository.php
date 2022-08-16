@@ -2,26 +2,26 @@
 
 namespace App\Repository;
 
-use App\Entity\Setting;
+use App\Entity\Settings;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @extends ServiceEntityRepository<Setting>
+ * @extends ServiceEntityRepository<Settings>
  *
- * @method Setting|null find($id, $lockMode = null, $lockVersion = null)
- * @method Setting|null findOneBy(array $criteria, array $orderBy = null)
- * @method Setting[]    findAll()
- * @method Setting[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method Settings|null find($id, $lockMode = null, $lockVersion = null)
+ * @method Settings|null findOneBy(array $criteria, array $orderBy = null)
+ * @method Settings[]    findAll()
+ * @method Settings[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class SettingRepository extends ServiceEntityRepository
+class SettingsRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, Setting::class);
+        parent::__construct($registry, Settings::class);
     }
 
-    public function add(Setting $entity, bool $flush = false): void
+    public function add(Settings $entity, bool $flush = false): void
     {
         $this->getEntityManager()->persist($entity);
 
@@ -30,7 +30,7 @@ class SettingRepository extends ServiceEntityRepository
         }
     }
 
-    public function remove(Setting $entity, bool $flush = false): void
+    public function remove(Settings $entity, bool $flush = false): void
     {
         $this->getEntityManager()->remove($entity);
 
@@ -40,7 +40,7 @@ class SettingRepository extends ServiceEntityRepository
     }
 
 //    /**
-//     * @return Setting[] Returns an array of Setting objects
+//     * @return Settings[] Returns an array of Settings objects
 //     */
 //    public function findByExampleField($value): array
 //    {
@@ -54,7 +54,7 @@ class SettingRepository extends ServiceEntityRepository
 //        ;
 //    }
 
-//    public function findOneBySomeField($value): ?Setting
+//    public function findOneBySomeField($value): ?Settings
 //    {
 //        return $this->createQueryBuilder('s')
 //            ->andWhere('s.exampleField = :val')

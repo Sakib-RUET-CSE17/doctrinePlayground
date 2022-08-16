@@ -52,3 +52,8 @@ services:
         class: App\Admin\BillAdmin
         tags:
             - { name: sonata.admin, model_class: App\Entity\Bill, controller: ~, manager_type: orm, group: admin, label: Bill }
+
+    admin.field:
+        class: App\Admin\FieldAdmin
+        tags:
+            - { name: sonata.admin, model_class: App\Entity\Field, controller: ~, manager_type: orm, group: admin, label: Field }
