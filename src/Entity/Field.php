@@ -22,6 +22,11 @@ class Field
     #[ORM\ManyToOne(inversedBy: 'fields')]
     private ?Settings $settings = null;
 
+    public function __toString()
+    {
+        return $this->name . '(' . $this->type . ')';
+    }
+
     public function getId(): ?int
     {
         return $this->id;

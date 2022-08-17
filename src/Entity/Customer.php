@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\CustomerRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: CustomerRepository::class)]
@@ -23,6 +24,12 @@ class Customer
 
     #[ORM\OneToMany(mappedBy: 'customer', targetEntity: Purchase::class)]
     private Collection $purchases;
+
+    #[ORM\ManyToOne(cascade: ['persist', 'remove'])]
+    private ?Settings $setting = null;
+
+    #[ORM\Column(nullable: true)]
+    private array $data = [];
 
     public function __construct()
     {
@@ -91,5 +98,53 @@ class Customer
         }
 
         return $this;
+    }
+
+    public function getSetting(): ?Settings
+    {
+        return $this->setting;
+    }
+
+    public function setSetting(?Settings $setting): self
+    {
+        $this->setting = $setting;
+
+        return $this;
+    }
+
+    public function getData(): array
+    {
+        return $this->data;
+    }
+
+    public function setData(?array $data): self
+    {
+        $this->data = $data;
+
+        return $this;
+    }
+
+    public function __set($name, $value)
+    {
+        // echo "Setting '$name' to '$value'\n";
+        // dd($name, $value);
+        $this->data[$name] = $value;
+    }
+
+    public function __get($name)
+    {
+        // echo "Getting '$name'\n";
+        if (array_key_exists($name, $this->data)) {
+            return $this->data[$name];
+        }
+
+        // $trace = debug_backtrace();
+        // trigger_error(
+        //     'Undefined property via __get(): ' . $name .
+        //         ' in ' . $trace[0]['file'] .
+        //         ' on line ' . $trace[0]['line'],
+        //     E_USER_NOTICE
+        // );
+        return null;
     }
 }

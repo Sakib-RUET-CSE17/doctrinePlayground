@@ -28,10 +28,15 @@ services:
             - { name: 'doctrine.orm.entity_listener', event: 'prePersist', entity: 'App\Entity\Purchase'}
             # - { name: 'doctrine.orm.entity_listener', event: 'preUpdate', entity: 'App\Entity\Conference'}
 
-    admin.setting:
-        class: App\Admin\SettingAdmin
+    App\EntityListener\SettingsEntityListener:
         tags:
-            - { name: sonata.admin, model_class: App\Entity\Setting, controller: ~, manager_type: orm, group: admin, label: Setting }
+            - { name: 'doctrine.orm.entity_listener', event: 'prePersist', entity: 'App\Entity\Settings'}
+            # - { name: 'doctrine.orm.entity_listener', event: 'preUpdate', entity: 'App\Entity\Conference'}
+
+    App\EntityListener\CustomerEntityListener:
+        tags:
+            - { name: 'doctrine.orm.entity_listener', event: 'prePersist', entity: 'App\Entity\Customer'}
+            # - { name: 'doctrine.orm.entity_listener', event: 'preUpdate', entity: 'App\Entity\Conference'}
 
     admin.product:
         class: App\Admin\ProductAdmin
@@ -40,11 +45,15 @@ services:
 
     admin.customer:
         class: App\Admin\CustomerAdmin
+        calls:
+            - setEntityManager: ['@doctrine.orm.default_entity_manager']
         tags:
             - { name: sonata.admin, model_class: App\Entity\Customer, controller: ~, manager_type: orm, group: admin, label: Customer }
 
     admin.purchase:
         class: App\Admin\PurchaseAdmin
+        # calls:
+        #     - setSettingsRepository: ['@settingsRepository']
         tags:
             - { name: sonata.admin, model_class: App\Entity\Purchase, controller: ~, manager_type: orm, group: admin, label: Purchase }
 
@@ -57,3 +66,8 @@ services:
         class: App\Admin\FieldAdmin
         tags:
             - { name: sonata.admin, model_class: App\Entity\Field, controller: ~, manager_type: orm, group: admin, label: Field }
+
+    admin.settings:
+        class: App\Admin\SettingsAdmin
+        tags:
+            - { name: sonata.admin, model_class: App\Entity\Settings, controller: ~, manager_type: orm, group: admin, label: Settings }

@@ -26,6 +26,11 @@ class Settings
         $this->fields = new ArrayCollection();
     }
 
+    public function __toString()
+    {
+        return $this->entity;
+    }
+
     public function getId(): ?int
     {
         return $this->id;
