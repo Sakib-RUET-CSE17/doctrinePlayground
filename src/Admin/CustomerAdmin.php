@@ -21,13 +21,32 @@ final class CustomerAdmin extends AbstractAdmin
         $this->entityManager = $entityManager;
     }
 
+    private function getCustomerSettingsFields()
+    {
+        // $customer = $this->getSubject();
+        $customerSettings = $this->entityManager->getRepository(Settings::class)->findOneBy(['entity' => 'Customer']);
+        // dd($this->entityManager->getRepository(Settings::class)->findOneBy(['entity' => 'Customer']));
+        $fields = [];
+        if ($customerSettings) {
+            // $customer->setSetting($customerSettings);
+            $fields = $customerSettings->getFields();
+        }
+        return $fields;
+    }
+
     protected function configureDatagridFilters(DatagridMapper $filter): void
     {
         $filter
             ->add('id')
             ->add('name')
-            ->add('phone')
-            ->add('email');
+            ->add('phone');
+        $fields = $this->getCustomerSettingsFields();
+        foreach ($fields as $field) {
+            $fieldName = $field->getName();
+            $fieldType = $field->getType();
+            // dump($fieldName . '-' . $fieldType);
+            $filter->add($fieldName);
+        }
     }
 
     protected function configureListFields(ListMapper $list): void
@@ -36,36 +55,36 @@ final class CustomerAdmin extends AbstractAdmin
             ->add('id')
             ->add('name')
             ->add('phone')
-            ->add('data')
-            ->add('email')
-            ->add(ListMapper::NAME_ACTIONS, null, [
-                'actions' => [
-                    'show' => [],
-                    'edit' => [],
-                    'delete' => [],
-                ],
-            ]);
+            ->add('data');
+        $fields = $this->getCustomerSettingsFields();
+        foreach ($fields as $field) {
+            $fieldName = $field->getName();
+            $fieldType = $field->getType();
+            // dump($fieldName . '-' . $fieldType);
+            $list->add($fieldName);
+        }
+        $list->add(ListMapper::NAME_ACTIONS, null, [
+            'actions' => [
+                'show' => [],
+                'edit' => [],
+                'delete' => [],
+            ],
+        ]);
     }
 
     protected function configureFormFields(FormMapper $form): void
     {
-        $customer = $this->getSubject();
-        $customerSettings = $this->entityManager->getRepository(Settings::class)->findOneBy(['entity' => 'Customer']);
-        // dd($this->entityManager->getRepository(Settings::class)->findOneBy(['entity' => 'Customer']));
-
         $form
             ->add('name')
             ->add('phone');
-        if ($customerSettings) {
-            $customer->setSetting($customerSettings);
-            $fields = $customerSettings->getFields();
-            foreach ($fields as $field) {
-                $fieldName = $field->getName();
-                $fieldType = $field->getType();
-                // dump($fieldName . '-' . $fieldType);
-                $form->add($fieldName);
-            }
+        $fields = $this->getCustomerSettingsFields();
+        foreach ($fields as $field) {
+            $fieldName = $field->getName();
+            $fieldType = $field->getType();
+            // dump($fieldName . '-' . $fieldType);
+            $form->add($fieldName);
         }
+
         // dd($fields[0]);
 
         // ->add('setting');
@@ -76,8 +95,13 @@ final class CustomerAdmin extends AbstractAdmin
         $show
             ->add('id')
             ->add('name')
-            ->add('data')
-            ->add('email')
-            ->add('phone');
+            ->add('data');
+        $fields = $this->getCustomerSettingsFields();
+        foreach ($fields as $field) {
+            $fieldName = $field->getName();
+            $fieldType = $field->getType();
+            // dump($fieldName . '-' . $fieldType);
+            $show->add($fieldName);
+        }
     }
 }
