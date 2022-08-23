@@ -13,11 +13,14 @@ class CustomerController extends AbstractController
     public function index(CustomerRepository $customerRepository): Response
     {
 
-        $result = $customerRepository->createQueryBuilder('c')
-            ->andWhere('jsonQuery("email","hsakib8685@gmail.com")')
-            ->getQuery()
-            ->getResult();
-        dd($result);
+        $query = $customerRepository->createQueryBuilder('c')
+            ->andWhere("JSON_GET_TEXT(c.data, 'purchasedCount') = :purchasedCount")
+            ->getQuery();
+        // ->getResult();
+        $result = $query->execute([
+            'purchasedCount' => '77',
+        ]);
+        dd($query->getDQL(), $result);
 
         return $this->render('customer/index.html.twig', [
             'controller_name' => 'CustomerController',
