@@ -9,7 +9,7 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: CustomerRepository::class)]
-class Customer extends MagicGetSet
+class Customer extends ExtendableEntity
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]

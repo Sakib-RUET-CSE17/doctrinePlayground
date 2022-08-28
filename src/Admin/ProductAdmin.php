@@ -10,7 +10,7 @@ use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
 
-final class ProductAdmin extends AbstractAdmin
+final class ProductAdmin extends ExtendableEntityAdmin
 {
 
     protected function configureDatagridFilters(DatagridMapper $filter): void
@@ -29,13 +29,21 @@ final class ProductAdmin extends AbstractAdmin
             ->add('name')
             ->add('price')
             ->add('stock')
-            ->add(ListMapper::NAME_ACTIONS, null, [
-                'actions' => [
-                    'show' => [],
-                    'edit' => [],
-                    'delete' => [],
-                ],
-            ]);
+            ->add('data');
+        $fields = $this->getSettingsFields('Product');
+        foreach ($fields as $field) {
+            $fieldName = $field->getName();
+            $fieldType = $field->getType();
+            // dump($fieldName . '-' . $fieldType);
+            $list->add($fieldName);
+        }
+        $list->add(ListMapper::NAME_ACTIONS, null, [
+            'actions' => [
+                'show' => [],
+                'edit' => [],
+                'delete' => [],
+            ],
+        ]);
     }
 
     protected function configureFormFields(FormMapper $form): void
@@ -44,6 +52,13 @@ final class ProductAdmin extends AbstractAdmin
             ->add('name')
             ->add('price')
             ->add('stock');
+        $fields = $this->getSettingsFields('Product');
+        foreach ($fields as $field) {
+            $fieldName = $field->getName();
+            $fieldType = $field->getType();
+            // dump($fieldName . '-' . $fieldType);
+            $form->add($fieldName);
+        }
     }
 
     protected function configureShowFields(ShowMapper $show): void
@@ -53,5 +68,12 @@ final class ProductAdmin extends AbstractAdmin
             ->add('name')
             ->add('price')
             ->add('stock');
+        $fields = $this->getSettingsFields('Product');
+        foreach ($fields as $field) {
+            $fieldName = $field->getName();
+            $fieldType = $field->getType();
+            // dump($fieldName . '-' . $fieldType);
+            $show->add($fieldName);
+        }
     }
 }

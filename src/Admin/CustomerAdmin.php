@@ -14,45 +14,45 @@ use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Route\RouteCollectionInterface;
 use Sonata\AdminBundle\Show\ShowMapper;
 
-final class CustomerAdmin extends AbstractAdmin
+final class CustomerAdmin extends ExtendableEntityAdmin
 {
-    private EntityManager $entityManager;
-    private array $jsonFilter = [];
+    // private EntityManager $entityManager;
+    // private array $jsonFilter = [];
 
-    public function setEntityManager(EntityManager $entityManager)
-    {
-        $this->entityManager = $entityManager;
-    }
+    // public function setEntityManager(EntityManager $entityManager)
+    // {
+    //     $this->entityManager = $entityManager;
+    // }
 
-    public function setJsonFilter(array $jsonFilter = [])
-    {
-        $this->jsonFilter = $jsonFilter;
-        // dd($jsonFilter);
-    }
+    // public function setJsonFilter(array $jsonFilter = [])
+    // {
+    //     $this->jsonFilter = $jsonFilter;
+    //     // dd($jsonFilter);
+    // }
 
-    protected function configureQuery(ProxyQueryInterface $query): ProxyQueryInterface
-    {
-        // dd($this->jsonFilter);
-        foreach ($this->jsonFilter as $field => $value) {
-            $query->andWhere("JSON_GET_TEXT(o.data, '$field') = :$field")
-                ->setParameter($field, $value);
-        }
-        // dd($query->getDQL());
-        return $query;
-    }
+    // protected function configureQuery(ProxyQueryInterface $query): ProxyQueryInterface
+    // {
+    //     // dd($this->jsonFilter);
+    //     foreach ($this->jsonFilter as $field => $value) {
+    //         $query->andWhere("JSON_GET_TEXT(o.data, '$field') = :$field")
+    //             ->setParameter($field, $value);
+    //     }
+    //     // dd($query->getDQL());
+    //     return $query;
+    // }
 
-    private function getCustomerSettingsFields()
-    {
-        // $customer = $this->getSubject();
-        $customerSettings = $this->entityManager->getRepository(Settings::class)->findOneBy(['entity' => 'Customer']);
-        // dd($this->entityManager->getRepository(Settings::class)->findOneBy(['entity' => 'Customer']));
-        $fields = [];
-        if ($customerSettings) {
-            // $customer->setSetting($customerSettings);
-            $fields = $customerSettings->getFields();
-        }
-        return $fields;
-    }
+    // private function getCustomerSettingsFields()
+    // {
+    //     // $customer = $this->getSubject();
+    //     $customerSettings = $this->entityManager->getRepository(Settings::class)->findOneBy(['entity' => 'Customer']);
+    //     // dd($this->entityManager->getRepository(Settings::class)->findOneBy(['entity' => 'Customer']));
+    //     $fields = [];
+    //     if ($customerSettings) {
+    //         // $customer->setSetting($customerSettings);
+    //         $fields = $customerSettings->getFields();
+    //     }
+    //     return $fields;
+    // }
 
     protected function configureDatagridFilters(DatagridMapper $filter): void
     {
@@ -60,7 +60,7 @@ final class CustomerAdmin extends AbstractAdmin
             ->add('id')
             ->add('name')
             ->add('phone');
-        $fields = $this->getCustomerSettingsFields();
+        $fields = $this->getSettingsFields('Customer');
         foreach ($fields as $field) {
             $fieldName = $field->getName();
             $fieldType = $field->getType();
@@ -83,7 +83,7 @@ final class CustomerAdmin extends AbstractAdmin
             ->add('name')
             ->add('phone')
             ->add('data');
-        $fields = $this->getCustomerSettingsFields();
+        $fields = $this->getSettingsFields('Customer');
         foreach ($fields as $field) {
             $fieldName = $field->getName();
             $fieldType = $field->getType();
@@ -104,7 +104,7 @@ final class CustomerAdmin extends AbstractAdmin
         $form
             ->add('name')
             ->add('phone');
-        $fields = $this->getCustomerSettingsFields();
+        $fields = $this->getSettingsFields('Customer');
         foreach ($fields as $field) {
             $fieldName = $field->getName();
             $fieldType = $field->getType();
@@ -123,7 +123,7 @@ final class CustomerAdmin extends AbstractAdmin
             ->add('id')
             ->add('name')
             ->add('data');
-        $fields = $this->getCustomerSettingsFields();
+        $fields = $this->getSettingsFields('Customer');
         foreach ($fields as $field) {
             $fieldName = $field->getName();
             $fieldType = $field->getType();

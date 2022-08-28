@@ -41,16 +41,21 @@ final class CustomerAdminController extends CRUDController
             ->add('email', EmailType::class, [
                 'required' => false,
             ])
-            // ->add('purchasedCount', NumberType::class, [
-            //     'required' => false,
-            // ])
+            ->add('purchasedCount', NumberType::class, [
+                'required' => false,
+            ])
             ->add('filter', SubmitType::class)
             ->getForm();
         $jsonFilterForm->handleRequest($request);
         // dd($request->query->all());
         if ($jsonFilterForm->isSubmitted() && $jsonFilterForm->isValid()) {
-            // dd($jsonFilterForm->getData());
             $data = $jsonFilterForm->getData();
+            foreach ($data as $key => $value) {
+                if (!$value) {
+                    unset($data[$key]);
+                }
+            }
+            // dd($jsonFilterForm->getData(), $data);
             $this->admin->setJsonFilter($data);
         }
         $datagrid = $this->admin->getDatagrid();
