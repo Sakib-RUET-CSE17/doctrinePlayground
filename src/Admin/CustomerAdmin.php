@@ -44,8 +44,8 @@ final class CustomerAdmin extends ExtendableEntityAdmin
     // private function getCustomerSettingsFields()
     // {
     //     // $customer = $this->getSubject();
-    //     $customerSettings = $this->entityManager->getRepository(Settings::class)->findOneBy(['entity' => 'Customer']);
-    //     // dd($this->entityManager->getRepository(Settings::class)->findOneBy(['entity' => 'Customer']));
+    //     $customerSettings = $this->entityManager->getRepository(Settings::class)->findOneBy(['entity' => $this->getLabel()]);
+    //     // dd($this->entityManager->getRepository(Settings::class)->findOneBy(['entity' => $this->getLabel()]));
     //     $fields = [];
     //     if ($customerSettings) {
     //         // $customer->setSetting($customerSettings);
@@ -60,7 +60,7 @@ final class CustomerAdmin extends ExtendableEntityAdmin
             ->add('id')
             ->add('name')
             ->add('phone');
-        $fields = $this->getSettingsFields('Customer');
+        $fields = $this->getSettingsFields($this->getLabel());
         foreach ($fields as $field) {
             $fieldName = $field->getName();
             $fieldType = $field->getType();
@@ -83,7 +83,7 @@ final class CustomerAdmin extends ExtendableEntityAdmin
             ->add('name')
             ->add('phone')
             ->add('data');
-        $fields = $this->getSettingsFields('Customer');
+        $fields = $this->getSettingsFields($this->getLabel());
         foreach ($fields as $field) {
             $fieldName = $field->getName();
             $fieldType = $field->getType();
@@ -104,7 +104,7 @@ final class CustomerAdmin extends ExtendableEntityAdmin
         $form
             ->add('name')
             ->add('phone');
-        $fields = $this->getSettingsFields('Customer');
+        $fields = $this->getSettingsFields($this->getLabel());
         foreach ($fields as $field) {
             $fieldName = $field->getName();
             $fieldType = $field->getType();
@@ -123,7 +123,7 @@ final class CustomerAdmin extends ExtendableEntityAdmin
             ->add('id')
             ->add('name')
             ->add('data');
-        $fields = $this->getSettingsFields('Customer');
+        $fields = $this->getSettingsFields($this->getLabel());
         foreach ($fields as $field) {
             $fieldName = $field->getName();
             $fieldType = $field->getType();

@@ -43,7 +43,7 @@ services:
         calls:
             - setEntityManager: ['@doctrine.orm.default_entity_manager']
         tags:
-            - { name: sonata.admin, model_class: App\Entity\Product, controller: ~, manager_type: orm, group: admin, label: Product }
+            - { name: sonata.admin, model_class: App\Entity\Product, controller: App\Controller\ExtendableEntityAdminController, manager_type: orm, group: admin, label: Product }
 
     admin.purchase:
         class: App\Admin\PurchaseAdmin
@@ -73,4 +73,4 @@ services:
             # - [setTemplate, ['list', 'CustomerAdmin/filter.html.twig']]
             - setEntityManager: ['@doctrine.orm.default_entity_manager'] 
         tags:
-            - { name: sonata.admin, model_class: App\Entity\Customer, controller: App\Controller\CustomerAdminController, manager_type: orm, group: admin, label: Customer }
+            - { name: sonata.admin, model_class: App\Entity\Customer, controller: App\Controller\ExtendableEntityAdminController, manager_type: orm, group: admin, label: Customer }

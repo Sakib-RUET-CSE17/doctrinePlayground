@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Entity\Settings;
+use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Sonata\AdminBundle\Controller\CRUDController;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
@@ -13,8 +16,13 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-final class CustomerAdminController extends CRUDController
+final class ExtendableEntityAdminController extends CRUDController
 {
+
+    public function __construct(private EntityManagerInterface $entityManager)
+    {
+    }
+
     /**
      * @throws AccessDeniedException If access is not granted
      */
@@ -36,15 +44,26 @@ final class CustomerAdminController extends CRUDController
         }
 
         // Custom code
+        $settings = $this->entityManager->getRepository(Settings::class)->findOneBy(['entity' => $this->admin->getLabel()]);
+        $fields = [];
+        if ($settings) {
+            $fields = $settings->getFields();
+            // dd($fields);
+        }
+
         $jsonFilterForm = $this->container->get('form.factory')->createNamedBuilder('jsonfilter')
-            ->setMethod('GET')
-            ->add('email', EmailType::class, [
+            ->setMethod('GET');
+        foreach ($fields as $field) {
+            // dd($field);
+            $fieldName = $field->getName();
+            $fieldType = $field->getType();
+            // dump($fieldName . '-' . $fieldType);
+            $jsonFilterForm->add($fieldName, null, [
                 'required' => false,
-            ])
-            ->add('purchasedCount', NumberType::class, [
-                'required' => false,
-            ])
-            ->add('filter', SubmitType::class)
+            ]);
+        }
+
+        $jsonFilterForm = $jsonFilterForm->add('filter', SubmitType::class)
             ->getForm();
         $jsonFilterForm->handleRequest($request);
         // dd($request->query->all());

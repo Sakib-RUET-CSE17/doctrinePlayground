@@ -30,7 +30,7 @@ final class ProductAdmin extends ExtendableEntityAdmin
             ->add('price')
             ->add('stock')
             ->add('data');
-        $fields = $this->getSettingsFields('Product');
+        $fields = $this->getSettingsFields($this->getLabel());
         foreach ($fields as $field) {
             $fieldName = $field->getName();
             $fieldType = $field->getType();
@@ -52,7 +52,7 @@ final class ProductAdmin extends ExtendableEntityAdmin
             ->add('name')
             ->add('price')
             ->add('stock');
-        $fields = $this->getSettingsFields('Product');
+        $fields = $this->getSettingsFields($this->getLabel());
         foreach ($fields as $field) {
             $fieldName = $field->getName();
             $fieldType = $field->getType();
@@ -68,7 +68,7 @@ final class ProductAdmin extends ExtendableEntityAdmin
             ->add('name')
             ->add('price')
             ->add('stock');
-        $fields = $this->getSettingsFields('Product');
+        $fields = $this->getSettingsFields($this->getLabel());
         foreach ($fields as $field) {
             $fieldName = $field->getName();
             $fieldType = $field->getType();
