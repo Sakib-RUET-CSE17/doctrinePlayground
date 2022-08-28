@@ -9,7 +9,7 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: CustomerRepository::class)]
-class Customer
+class Customer extends MagicGetSet
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -28,12 +28,13 @@ class Customer
     #[ORM\ManyToOne(cascade: ['persist', 'remove'])]
     private ?Settings $setting = null;
 
-    #[ORM\Column(nullable: true)]
-    private array $data = [];
+    // #[ORM\Column(nullable: true)]
+    //  $data = [];
 
     public function __construct()
     {
         $this->purchases = new ArrayCollection();
+        // parent::__construct($this->data);
     }
 
     public function __toString()
@@ -112,39 +113,39 @@ class Customer
         return $this;
     }
 
-    public function getData(): array
-    {
-        return $this->data;
-    }
+    // public function getData(): array
+    // {
+    //     return $this->data;
+    // }
 
-    public function setData(?array $data): self
-    {
-        $this->data = $data;
+    // public function setData(?array $data): self
+    // {
+    //     $this->data = $data;
 
-        return $this;
-    }
+    //     return $this;
+    // }
 
-    public function __set($name, $value)
-    {
-        // echo "Setting '$name' to '$value'\n";
-        // dd($name, $value);
-        $this->data[$name] = $value;
-    }
+    // public function __set($name, $value)
+    // {
+    //     // echo "Setting '$name' to '$value'\n";
+    //     // dd($name, $value);
+    //     $this->data[$name] = $value;
+    // }
 
-    public function __get($name)
-    {
-        // echo "Getting '$name'\n";
-        if (array_key_exists($name, $this->data)) {
-            return $this->data[$name];
-        }
+    // public function __get($name)
+    // {
+    //     // echo "Getting '$name'\n";
+    //     if (array_key_exists($name, $this->data)) {
+    //         return $this->data[$name];
+    //     }
 
-        // $trace = debug_backtrace();
-        // trigger_error(
-        //     'Undefined property via __get(): ' . $name .
-        //         ' in ' . $trace[0]['file'] .
-        //         ' on line ' . $trace[0]['line'],
-        //     E_USER_NOTICE
-        // );
-        return null;
-    }
+    //     // $trace = debug_backtrace();
+    //     // trigger_error(
+    //     //     'Undefined property via __get(): ' . $name .
+    //     //         ' in ' . $trace[0]['file'] .
+    //     //         ' on line ' . $trace[0]['line'],
+    //     //     E_USER_NOTICE
+    //     // );
+    //     return null;
+    // }
 }
