@@ -9,16 +9,36 @@ use Doctrine\ORM\EntityManager;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
+use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
 use Sonata\AdminBundle\Form\FormMapper;
+use Sonata\AdminBundle\Route\RouteCollectionInterface;
 use Sonata\AdminBundle\Show\ShowMapper;
 
 final class CustomerAdmin extends AbstractAdmin
 {
     private EntityManager $entityManager;
+    private array $jsonFilter = [];
 
     public function setEntityManager(EntityManager $entityManager)
     {
         $this->entityManager = $entityManager;
+    }
+
+    public function setJsonFilter(array $jsonFilter = [])
+    {
+        $this->jsonFilter = $jsonFilter;
+        // dd($jsonFilter);
+    }
+
+    protected function configureQuery(ProxyQueryInterface $query): ProxyQueryInterface
+    {
+        // dd($this->jsonFilter);
+        foreach ($this->jsonFilter as $field => $value) {
+            $query->andWhere("JSON_GET_TEXT(o.data, '$field') = :$field")
+                ->setParameter($field, $value);
+        }
+        // dd($query->getDQL());
+        return $query;
     }
 
     private function getCustomerSettingsFields()
@@ -47,6 +67,13 @@ final class CustomerAdmin extends AbstractAdmin
             // dump($fieldName . '-' . $fieldType);
             $filter->add($fieldName);
         }
+        $filter->add(ListMapper::NAME_ACTIONS, null, [
+            'actions' => [
+                'show' => [],
+                'edit' => [],
+                'delete' => [],
+            ],
+        ]);
     }
 
     protected function configureListFields(ListMapper $list): void
