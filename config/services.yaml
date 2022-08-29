@@ -74,3 +74,8 @@ services:
             - setEntityManager: ['@doctrine.orm.default_entity_manager'] 
         tags:
             - { name: sonata.admin, model_class: App\Entity\Customer, controller: App\Controller\ExtendableEntityAdminController, manager_type: orm, group: admin, label: Customer }
+
+    admin.field_constraint:
+        class: App\Admin\FieldConstraintAdmin
+        tags:
+            - { name: sonata.admin, model_class: App\Entity\FieldConstraint, controller: ~, manager_type: orm, group: admin, label: FieldConstraint }

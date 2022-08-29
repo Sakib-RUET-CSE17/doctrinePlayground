@@ -8,27 +8,28 @@ use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
+use Sonata\AdminBundle\Form\Type\CollectionType;
 use Sonata\AdminBundle\Show\ShowMapper;
 
-final class FieldAdmin extends AbstractAdmin
+final class FieldConstraintAdmin extends AbstractAdmin
 {
 
     protected function configureDatagridFilters(DatagridMapper $filter): void
     {
         $filter
             ->add('id')
-            ->add('name')
-            ->add('type')
-            ->add('fieldConstraints');
+            ->add('classname')
+            ->add('options')
+            ->add('field');
     }
 
     protected function configureListFields(ListMapper $list): void
     {
         $list
             ->add('id')
-            ->add('name')
-            ->add('type')
-            ->add('fieldConstraints')
+            ->add('field')
+            ->add('classname')
+            ->add('options')
             ->add(ListMapper::NAME_ACTIONS, null, [
                 'actions' => [
                     'show' => [],
@@ -41,17 +42,19 @@ final class FieldAdmin extends AbstractAdmin
     protected function configureFormFields(FormMapper $form): void
     {
         $form
-            ->add('name')
-            ->add('type')
-            ->add('fieldConstraints');
+            ->add('field')
+            ->add('classname')
+            ->add('options', CollectionType::class, [
+                'allow_add' => true,
+            ]);
     }
 
     protected function configureShowFields(ShowMapper $show): void
     {
         $show
             ->add('id')
-            ->add('name')
-            ->add('type')
-            ->add('fieldConstraints');
+            ->add('field')
+            ->add('classname')
+            ->add('options');
     }
 }

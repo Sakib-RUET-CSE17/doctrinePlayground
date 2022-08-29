@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\FieldRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: FieldRepository::class)]
@@ -21,6 +23,14 @@ class Field
 
     #[ORM\ManyToOne(inversedBy: 'fields')]
     private ?Settings $settings = null;
+
+    #[ORM\OneToMany(mappedBy: 'field', targetEntity: FieldConstraint::class)]
+    private Collection $fieldConstraints;
+
+    public function __construct()
+    {
+        $this->fieldConstraints = new ArrayCollection();
+    }
 
     public function __toString()
     {
@@ -64,6 +74,36 @@ class Field
     public function setSettings(?Settings $settings): self
     {
         $this->settings = $settings;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, FieldConstraint>
+     */
+    public function getFieldConstraints(): Collection
+    {
+        return $this->fieldConstraints;
+    }
+
+    public function addFieldConstraint(FieldConstraint $fieldConstraint): self
+    {
+        if (!$this->fieldConstraints->contains($fieldConstraint)) {
+            $this->fieldConstraints->add($fieldConstraint);
+            $fieldConstraint->setField($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFieldConstraint(FieldConstraint $fieldConstraint): self
+    {
+        if ($this->fieldConstraints->removeElement($fieldConstraint)) {
+            // set the owning side to null (unless already changed)
+            if ($fieldConstraint->getField() === $this) {
+                $fieldConstraint->setField(null);
+            }
+        }
 
         return $this;
     }
